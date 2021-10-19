@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Home from './pages/Home';
 import reportWebVitals from './reportWebVitals';
+
+
+import 'bootstrap/dist/js/bootstrap.js';
+// Put any other imports below so that CSS from your
+// components takes precedence over default styles.
+
+import './styles/index.scss'
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Home />
   </React.StrictMode>,
   document.getElementById('root')
 );
