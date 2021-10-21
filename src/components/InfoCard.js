@@ -1,32 +1,114 @@
 import React from 'react'
+import Item from './Item';
 
-export default function InfoCard() {
-    return (
-        <div class="card text-center">
-  <div class="card-header">
-    <ul class="nav nav-pills card-header-pills">
-      <li class="nav-item">
-        <a class="nav-link active" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled">Disabled</a>
-      </li>
-    </ul>
-    </div>
+
+class InfoCard extends React.Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            value:"",
+            
+             todoItems: [
+                 { id:[], name: "wash clothes" },
+                 { id: [], name: "fart" },
+            ]
+        };
+        // this.handleClick = this.handleClick.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    // control items / click handler
+    handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+//    this.setState({value:"",id:[],name:''})
+this.setState(previousState => ({
+    todoItems: [...previousState.todoItems.concat('new value')]
+
+}));
+
+       
+// var newArray = this.state.todoItems.slice();    
+//     newArray.push("new value");   
+//     this.setState({todoItems:newArray})
+  console.log('someone farted')
+    //add new obj to list
+    event.preventDefault();
+  }
+
         
-  <div class="card-body">
-      <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Recipient's username" 
-  aria-label="Recipient's username" aria-describedby="button-addon2"></input>
-  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-</div>
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>
-    )
+        
+        // function stateSetter(previousState) {
+            
+        //         let newTodo = { id: 2, name: "" }
+            
+        //         let newTodoItems = [newTodo, ...previousState.todoItems]
+            
+        //         let obj = {
+        //         todoItems: newTodoItems
+        //     }
+
+        //     return obj
+        // }
+       
+
+        
+
+
+
+
+
+
+    render() {
+        let list = this.state.todoItems.map((item, i) => {
+            return <Item key={i} data={item} name ={''} />
+        });
+        return (
+            <div className="card text-center fixed-bottom bg-dark text-secondary">
+                <div className="card-header">
+                    <ul className="nav nav-pills card-header-pills">
+                        <li className="nav-item">
+                            <a className="nav-link active" href="#" id="active">Active</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#" id="completed">Completed</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#" id="all">All</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div className="card-body">
+                    <div className="input-group mb-3">
+                        <input onChange={this.handleChange} onSubmit={this.handleSubmit}
+                            type="text"
+                            className="form-control"
+                            placeholder="Add Item to list here."
+                            aria-label="Recipient's username"
+                            aria-describedby="button-addon2"
+                            value={this.state.value}
+                        />
+                     
+                        <button
+                            className="btn btn-outline-secondary"
+                            type="button"
+                            id="button-addon2"
+                            onClick={this.handleSubmit}
+                        >
+                            Add Item
+                        </button>
+                    </div>
+                    {list}
+                    <button href="#" className="btn btn-primary" type='reset' id='clear'>Clear</button>
+                </div>
+            </div>
+        )
+    }
 }
+
+
+export default InfoCard;
