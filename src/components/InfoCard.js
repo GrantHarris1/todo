@@ -45,11 +45,7 @@ class InfoCard extends React.Component {
         });
 
 
-        //    tmpList.Map(completed: true => this.state.tmpList )
-        // tmpList = this.state.todoItems;
-        // tmpList map
-        // if id set completed
-        // set the state items arr = tmpList
+
         this.setState({ todoItem: tmpList })
     }
 
@@ -108,52 +104,8 @@ class InfoCard extends React.Component {
     updateList(name) {
         localStorage.setItem(name)
 
-        // var newArray = this.state.todoItems.slice();    
-        //     newArray.push("new value");   
-        //     this.setState({todoItems:newArray})
-        //   console.log('someone farted')
-        //     //add new obj to list
-        //     event.preventDefault();
+
     }
-    // onKeyPressed(event){
-    //     //   if (event.key === 'return') {
-    //         console.log(this.state.todoItems)
-    //     // create item
-    //     let item = { key: Date.now(), name: this.state.value, completed: false };
-
-    //     // copy the list of current items
-    //     let list = this.state.todoItems;
-
-    //     // add the item
-    //     list.push(item);
-
-    //     // set state with the todoItms = list, so that nuke/pave
-    //     this.setState({ todoItems: list });
-    // }
-    // }
-
-
-
-    // function stateSetter(previousState) {
-
-    //         let newTodo = { id: 2, name: "" }
-
-    //         let newTodoItems = [newTodo, ...previousState.todoItems]
-
-    //         let obj = {
-    //         todoItems: newTodoItems
-    //     }
-
-    //     return obj
-    // }
-
-
-
-
-
-
-
-
 
     render() {
 
