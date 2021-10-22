@@ -12,7 +12,7 @@ page/ app
 M. Input to handle adding items to todo list <form>, create [array] to handle items.
 onclick event when submitted pushes to array.
 
-V. Submit info <input>, list of items to complete.[]
+V. Submit info <input>, list of items to complete.[], poopulates it Items, adds to {list}.
 
 C. submit <button>, onClickHandler, should populate to items [array]. send to update view.
 

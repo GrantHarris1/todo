@@ -3,59 +3,152 @@ import Item from './Item';
 
 
 class InfoCard extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
-            value:"",
-            
-             todoItems: [
-                 { id:[], name: "wash clothes" },
-                 { id: [], name: "fart" },
-            ]
+            value: "",
+
+            currentPage: "all",
+            todoItems: []
         };
         // this.handleClick = this.handleClick.bind(this)
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleStateChange = this.handleStateChange.bind(this);
+        // this.onKeyPressed = this.onKeyPressed.bind(this);
+        this.completeItem = this.completeItem.bind(this)
+        this.deleteItem = this.deleteItem.bind(this)
     }
     // control items / click handler
     handleChange(event) {
-    this.setState({value: event.target.value});
-  }
+        console.log({ value: event.target.value })
+        this.setState({ value: event.target.value });
+    }
 
-  handleSubmit(event) {
-//    this.setState({value:"",id:[],name:''})
-this.setState(previousState => ({
-    todoItems: [...previousState.todoItems.concat('new value')]
+    handleStateChange(newView) {
+        this.setState({ currentPage: newView });
+    }
 
-}));
+    completeItem(id) {
+        // TODO: copy this code for your delete item
 
-       
-// var newArray = this.state.todoItems.slice();    
-//     newArray.push("new value");   
-//     this.setState({todoItems:newArray})
-  console.log('someone farted')
-    //add new obj to list
-    event.preventDefault();
-  }
+        let tmpList = this.state.todoItems.map(todoItem => {
 
-        
-        
-        // function stateSetter(previousState) {
-            
-        //         let newTodo = { id: 2, name: "" }
-            
-        //         let newTodoItems = [newTodo, ...previousState.todoItems]
-            
-        //         let obj = {
-        //         todoItems: newTodoItems
-        //     }
+            // TODO: for delete function, when you find the match, just skip it (filter, insted of map)
+            if (id === todoItem.id) {
+                todoItem.completed = !todoItem.completed
+            }
 
-        //     return obj
-        // }
-       
+            return todoItem
 
-        
+        });
+
+
+        //    tmpList.Map(completed: true => this.state.tmpList )
+        // tmpList = this.state.todoItems;
+        // tmpList map
+        // if id set completed
+        // set the state items arr = tmpList
+        this.setState({ todoItem: tmpList })
+    }
+
+    deleteItem(id) {
+
+
+        let tmpList = this.state.todoItems.filter(todoItem => {
+            if (id !== todoItem.id) {
+                // todoItem.completed = !todoItem.completed
+                console.log(todoItem)
+                return todoItem
+            }
+        });
+
+        this.setState({ todoItems: tmpList })
+
+    }
+
+    handleSubmit() {
+        console.log(this.state.todoItems)
+        // create item
+        let item = { id: Date.now(), name: this.state.value, completed: false };
+
+        // copy the list of current items
+        let list = this.state.todoItems;
+
+        // add the item
+        list.push(item);
+
+        // set state with the todoItms = list, so that nuke/pave
+        this.setState({ todoItems: list, value: '' });
+
+        // localStorage.setState({todoItems:list})
+    }
+
+    handleClear(event) {
+
+
+    }
+    componentWillMount() {
+        let list = localStorage.getItem('list')
+        if (list) {
+            this.setState({ todoItems: JSON.parse(list) })
+        }
+    }
+
+
+    componentDidUpdate() {
+        this.saveToLocalStorage()
+    }
+
+    saveToLocalStorage() {
+        localStorage.setItem('list', JSON.stringify(this.state.todoItems))
+    }
+
+    updateList(name) {
+        localStorage.setItem(name)
+
+        // var newArray = this.state.todoItems.slice();    
+        //     newArray.push("new value");   
+        //     this.setState({todoItems:newArray})
+        //   console.log('someone farted')
+        //     //add new obj to list
+        //     event.preventDefault();
+    }
+    // onKeyPressed(event){
+    //     //   if (event.key === 'return') {
+    //         console.log(this.state.todoItems)
+    //     // create item
+    //     let item = { key: Date.now(), name: this.state.value, completed: false };
+
+    //     // copy the list of current items
+    //     let list = this.state.todoItems;
+
+    //     // add the item
+    //     list.push(item);
+
+    //     // set state with the todoItms = list, so that nuke/pave
+    //     this.setState({ todoItems: list });
+    // }
+    // }
+
+
+
+    // function stateSetter(previousState) {
+
+    //         let newTodo = { id: 2, name: "" }
+
+    //         let newTodoItems = [newTodo, ...previousState.todoItems]
+
+    //         let obj = {
+    //         todoItems: newTodoItems
+    //     }
+
+    //     return obj
+    // }
+
+
+
 
 
 
@@ -63,21 +156,38 @@ this.setState(previousState => ({
 
 
     render() {
-        let list = this.state.todoItems.map((item, i) => {
-            return <Item key={i} data={item} name ={''} />
-        });
+
+        let tmpList = this.state.todoItems;
+        // if we are in the "completed"
+        if (this.state.currentPage === "completed") {
+            // filter tmpList to return only completed
+            tmpList = this.state.todoItems.filter(todoItem => todoItem.completed)
+        }
+        if (this.state.currentPage === "active") {
+            // filter tmpList to return only completed
+            tmpList = this.state.todoItems.filter(todoItem => !todoItem.completed)
+        }
+        let list = tmpList.map((item, i) => (
+            <Item
+                key={i}
+                data={item}
+                completeItem={this.completeItem}
+                deleteItem={this.deleteItem}
+            />
+        )
+        );
         return (
             <div className="card text-center fixed-bottom bg-dark text-secondary">
                 <div className="card-header">
                     <ul className="nav nav-pills card-header-pills">
                         <li className="nav-item">
-                            <a className="nav-link active" href="#" id="active">Active</a>
+                            <a className={`nav-link ${(this.state.currentPage === 'active') && 'active'}`} href="#" onClick={() => this.handleStateChange("active")}>Active</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#" id="completed">Completed</a>
+                            <a className={`nav-link ${(this.state.currentPage === 'completed') && 'active'}`} href="#" onClick={() => this.handleStateChange("completed")}>Completed</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#" id="all">All</a>
+                            <a className={`nav-link ${(this.state.currentPage === 'all') && 'active'}`} href="#" onClick={() => this.handleStateChange('all')}>All</a>
                         </li>
                     </ul>
                 </div>
@@ -92,18 +202,25 @@ this.setState(previousState => ({
                             aria-describedby="button-addon2"
                             value={this.state.value}
                         />
-                     
+
                         <button
                             className="btn btn-outline-secondary"
                             type="button"
                             id="button-addon2"
                             onClick={this.handleSubmit}
+                            onKeyDown={this.onKeyPressed}
                         >
                             Add Item
                         </button>
                     </div>
                     {list}
-                    <button href="#" className="btn btn-primary" type='reset' id='clear'>Clear</button>
+                    <button href="#"
+                        className="btn btn-primary"
+                        type='reset'
+                        id='clear'
+                        onClick={this.handleClear}
+                    >Clear
+                        </button>
                 </div>
             </div>
         )
