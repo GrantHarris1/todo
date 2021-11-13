@@ -1,12 +1,12 @@
 
 import './App.css';
+import InfoCard from './InfoCard';
+
 
 function App() {
   return (
     <div>
-      <header>
-        
-      </header>
+      <InfoCard />  
     </div>
   );
 }
